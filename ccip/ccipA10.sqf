@@ -102,7 +102,7 @@ CCIP_main = {
   _plane = _this;
   if(isPlayer (driver _plane)) then {
     currentPlane = _plane;
-    _providerFileName =  (typeOf _plane + "_ccipProvider.sqf");
+    _providerFileName =  "ccipProviders\" + (typeOf _plane + "_ccipProvider.sqf");
     systemChat _providerFileName;
     currentProvider = call compile preprocessFileLineNumbers _providerFileName; //returns a pairs array (hashmap/dictionary of some sorts)
 
