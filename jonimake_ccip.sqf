@@ -1,7 +1,8 @@
 // CCIP script by Joni Mäkelä
 // For custom vehicles please provide a provider TODO description
 
-#define  DEBUG true
+#define DEBUG
+#define TRACE
 GLOBAL_ITERATION_COUNT = 512;
 GLOBAL_DT = 0.01;
 
@@ -19,14 +20,13 @@ currentPlane = objNull;
 fancyColors = [];
 currentProvider = [];
 
-
-getImpactPos = compile preprocessFileLineNumbers  "jonimake_ccip\getImpactPos.sqf";
-getImpactPosRocket = compile preprocessFileLineNumbers  "jonimake_ccip\getImpactPosRocket.sqf";
-getImpactPosBomb = compile preprocessFileLineNumbers  "jonimake_ccip\getImpactPosBomb.sqf";
+getImpactPos        = compile preprocessFileLineNumbers  "jonimake_ccip\getImpactPos.sqf";
+getImpactPosRocket  = compile preprocessFileLineNumbers  "jonimake_ccip\getImpactPosRocket.sqf";
+getImpactPosBomb    = compile preprocessFileLineNumbers  "jonimake_ccip\getImpactPosBomb.sqf";
 
 getDrawPos = {
     _plane = _this;
-    _ammoName         =   getText(configFile >> "CfgMagazines" >> (currentMagazine _plane) >> "ammo");
+    _ammoName         = getText  (configFile >> "CfgMagazines" >> (currentMagazine _plane) >> "ammo");
     _initSpeed        = getNumber(configFile >> "CfgMagazines" >> (currentMagazine _plane) >> "initSpeed");
     _mass             = getNumber(configFile >> "CfgMagazines" >> (currentMagazine _plane) >> "mass");
     _airFriction      = getNumber(configFile >> "CfgAmmo" >> _ammoName >> "airFriction");
@@ -41,19 +41,16 @@ getDrawPos = {
             (_vecDir select 0)*_initSpeed,
             (_vecDir select 1)*_initSpeed,
             (_vecDir select 2)*_initSpeed];
-
     _positions = [[0,0,0],[]];
     _providerPairs = (currentProvider select 1);
     _providerInfoPos = [_providerPairs, (currentWeapon currentPlane)] call BIS_fnc_findInPairs;
 
     _providerInfo = _providerPairs select _providerInfoPos;
     _gunName = _providerInfo select 1;
-    _gunPos = ATLToASL (_plane modelToWorld (_plane selectionPosition _gunName)); //asl pos ATLToASL
-
-
+    _gunPos = _plane modelToWorld (_plane selectionPosition _gunName);//this is in getPos format?
 
     if(_ammoName isKindOf "MissileCore") then {
-      _thrust = getNumber(configFile >> "CfgAmmo" >> _ammoName >> "thrust");
+      _thrust    = getNumber(configFile >> "CfgAmmo" >> _ammoName >> "thrust");
       _thrustTTL = getNumber(configFile >> "CfgAmmo" >> _ammoName >> "thrustTime");
       _positions = [_bulletVelVec, _gunPos, _airFriction, _sideAirFriction, _vel, _timeToLive, _thrust, _thrustTTL, _mass] call getImpactPosRocket;
     };
