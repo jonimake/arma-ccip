@@ -5,7 +5,7 @@
 GLOBAL_ITERATION_COUNT = 512;
 GLOBAL_DT = 0.01;
 
-if(isDedicated) exitWith{};
+if(isDedicated) exitWith{}; //only run this on clients
 
 CCIP_enabled = false;
 ccipString = "";
@@ -48,7 +48,9 @@ getDrawPos = {
 
     _providerInfo = _providerPairs select _providerInfoPos;
     _gunName = _providerInfo select 1;
-    _gunPos = (_plane modelToWorld (_plane selectionPosition _gunName)); //asl pos ATLToASL
+    _gunPos = ATLToASL (_plane modelToWorld (_plane selectionPosition _gunName)); //asl pos ATLToASL
+
+
 
     if(_ammoName isKindOf "MissileCore") then {
       _thrust = getNumber(configFile >> "CfgAmmo" >> _ammoName >> "thrust");
@@ -107,7 +109,6 @@ CCIP_main = {
     currentProvider = call compile preprocessFileLineNumbers _providerFileName; //returns a pairs array (hashmap/dictionary of some sorts)
 
     onEachFrame {
-      //if(!(alive currentPlane) || !(isPlayer (driver currentPlane))) then { onEachFrame{}};
       call calculateImpactPoint;
   #ifdef DEBUG
       call ccipDrawHandler;
@@ -120,9 +121,9 @@ if(_this isKindOf "plane") then {
   systemChat str _this;
   _plane = _this;
   _ccipHandle = _this addEventHandler ["GetIn", {_nil = (_this select 0) spawn CCIP_main;}];
-  if(isPlayer (driver _plane)) then {
+  if(isPlayer (driver _plane)) then { //this handles starting mission in a plane without getting in
     _this spawn CCIP_main;
   };
 } else {
-  hint "Can only execute on planes";
+  hint "Can only execute ccip script on planes";
 };
