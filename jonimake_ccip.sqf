@@ -20,19 +20,19 @@ fancyColors = [];
 currentProvider = [];
 
 
-getImpactPos = compile preprocessFileLineNumbers  "getImpactPos.sqf";
-getImpactPosRocket = compile preprocessFileLineNumbers  "getImpactPosRocket.sqf";
-getImpactPosBomb = compile preprocessFileLineNumbers  "getImpactPosBomb.sqf";
+getImpactPos = compile preprocessFileLineNumbers  "jonimake_ccip\getImpactPos.sqf";
+getImpactPosRocket = compile preprocessFileLineNumbers  "jonimake_ccip\getImpactPosRocket.sqf";
+getImpactPosBomb = compile preprocessFileLineNumbers  "jonimake_ccip\getImpactPosBomb.sqf";
 
 getDrawPos = {
     _plane = _this;
+    _ammoName         =   getText(configFile >> "CfgMagazines" >> (currentMagazine _plane) >> "ammo");
+    _initSpeed        = getNumber(configFile >> "CfgMagazines" >> (currentMagazine _plane) >> "initSpeed");
+    _mass             = getNumber(configFile >> "CfgMagazines" >> (currentMagazine _plane) >> "mass");
+    _airFriction      = getNumber(configFile >> "CfgAmmo" >> _ammoName >> "airFriction");
+    _sideAirFriction  = getNumber(configFile >> "CfgAmmo" >> _ammoName >> "sideAirFriction");
+    _timeToLive       = getNumber(configFile >> "CfgAmmo" >> _ammoName >> "timeToLive");
 
-    _initSpeed = getNumber(configFile >> "CfgMagazines" >> (currentMagazine _plane) >> "initSpeed");
-    _ammoName = getText(configFile >> "CfgMagazines" >> (currentMagazine _plane) >> "ammo");
-    _airFriction = getNumber(configFile >> "CfgAmmo" >> _ammoName >> "airFriction");
-    _sideAirFriction = getNumber(configFile >> "CfgAmmo" >> _ammoName >> "sideAirFriction");
-    _timeToLive = getNumber(configFile >> "CfgAmmo" >> _ammoName >> "timeToLive");
-    _mass = getNumber(configFile >> "CfgMagazines" >> (currentMagazine _plane) >> "mass");
 
     _vecDir =_plane weaponDirection (currentWeapon _plane);
 
@@ -104,7 +104,7 @@ CCIP_main = {
   _plane = _this;
   if(isPlayer (driver _plane)) then {
     currentPlane = _plane;
-    _providerFileName =  "ccipProviders\" + (typeOf _plane + "_ccipProvider.sqf");
+    _providerFileName =  "jonimake_ccip\ccipProviders\" + (typeOf _plane + "_ccipProvider.sqf");
     systemChat _providerFileName;
     currentProvider = call compile preprocessFileLineNumbers _providerFileName; //returns a pairs array (hashmap/dictionary of some sorts)
 
