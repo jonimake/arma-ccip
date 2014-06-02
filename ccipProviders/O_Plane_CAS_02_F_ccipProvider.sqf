@@ -4,7 +4,7 @@ _allowedWeapons = [
 "Rocket_03_AP_Plane_CAS_02_F",
 "Bomb_03_Plane_CAS_02_F"];
 
-_gatlinInfo = "Gatling_barrels_end";
+_gatlinInfo = "Cannon_barrel_end";
 _heRocketInfo = "Rocket_2"; //right rocket
 _apRocketInfo = "Rocket_1"; //left rocket
 _bombInfo = "N/A";
