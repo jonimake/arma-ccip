@@ -9,19 +9,16 @@ _initialVelocity = _this select 4;
 _timeToLive = _this select 5;
 _gravity = 9.80665; //http://en.wikipedia.org/wiki/Standard_gravity
 
+if(surfaceNormal _pos) then {
+	_pos = ATLToASL;
+};
+
 private ["_posX","_posY","_posZ","_totalVelocityX","_totalVelocityY","_totalVelocityZ","_Vmag","_elapsedTime"];
 
 _elapsedTime = 0;
 
-_posX = _pos select 0;
-_posY = _pos select 1;
-_posZ = _pos select 2;
-
 //projectile velocity in meters per second
 _totalVelocity = vectorAdd [_velocityVec, _initialVelocity];
-_totalVelocityX = (_velocityVec select 0) + (_initialVelocity select 0);
-_totalVelocityY = (_velocityVec select 1) + (_initialVelocity select 1);
-_totalVelocityZ = (_velocityVec select 2) + (_initialVelocity select 2);
 
 private ["_result","_altPos","_positions","_vectorM","_time"];
 
@@ -53,7 +50,7 @@ for "_i" from 1 to _maxIterations do {
 
 	_elapsedTime = _elapsedTime + _dt;
 	//Calculate vector magnitude so that velocity vectors are calculated properly
-	_vectorM = sqrt (_totalVelocityX^2 + _totalVelocityY^2 + _totalVelocityZ^2); //velocity sqrt
+	_vectorM = vectorMagnitude _totalVelocity;
 	_vectorM = _vectorM*_airFriction;
 
 	//Recalculate velocity at the current point in time
