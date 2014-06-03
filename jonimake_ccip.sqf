@@ -7,7 +7,7 @@ GLOBAL_ITERATION_COUNT = 512;
 GLOBAL_DT = 0.01;
 
 if(isDedicated) exitWith{}; //only run this on clients
-
+debugPos = [0,0,0];
 CCIP_enabled = false;
 ccipString = "";
 ccipColor = [0,1,0,0.5];
@@ -46,7 +46,10 @@ getDrawPos = {
     _providerInfo = _providerPairs select _providerInfoPos;
     _gunName = _providerInfo select 1;
     _gunPos = _plane modelToWorld (_plane selectionPosition _gunName);//this is in getPos format?
-
+    if(!surfaceIsWater _gunPos) then {
+      _gunPos = ATLToASL _gunPos;
+    };
+    debugPos = _gunPos;
     if(_ammoName isKindOf "MissileCore") then {
       _thrust    = getNumber(configFile >> "CfgAmmo" >> _ammoName >> "thrust");
       _thrustTTL = getNumber(configFile >> "CfgAmmo" >> _ammoName >> "thrustTime");
@@ -60,7 +63,6 @@ getDrawPos = {
     if(_ammoName isKindOf "BombCore") then {
       _positions = [_bulletVelVec, _gunPos, _airFriction, _sideAirFriction, _vel, _timeToLive, 0, 0, _mass] call getImpactPosBomb;
     };
-
    _positions;
 };
 
@@ -72,6 +74,7 @@ calculateImpactPoint = {
     endTime = diag_tickTime;
     impactPos = _info select 0;
     trajectoryPositions = _info select 1;
+
   } else {
     CCIP_enabled = false;
   };
@@ -83,15 +86,28 @@ ccipDrawHandler = {
       for "_i" from 1 to ((count trajectoryPositions) - 1) do {
         _start = trajectoryPositions select (_i - 1);
         _end = trajectoryPositions select _i;
-        _r = _i % 1;
-        _g = _i % 2;
-        _b = _i % 3;
+
+        if(!surfaceIsWater _start) then {
+          _start = ASLToATL _start;
+        };
+        if(!surfaceIsWater _end) then {
+          _end = ASLToATL _end;
+        };
+
+        _r = _i % 2;
+        _g = _i % 3;
+        _b = _i % 4;
         _color = [_r, _g, _b, 1];
         drawLine3D [_start, _end, _color];
       };
     };
     ccipString = str (impactPos distance currentPlane);
-    drawIcon3D [ccipIcon, ccipColor, impactPos, 2, 2, 0, ccipString, 2, ccipFontSize];
+    _drawPos = impactPos;
+    //if(!surfaceIsWater _drawPos) then {
+    //  _drawPos = ASLToATL _drawPos;
+    //};
+
+    drawIcon3D [ccipIcon, ccipColor, _drawPos, 2, 2, 0, ccipString, 2, ccipFontSize];
   };
 };
 
