@@ -20,15 +20,10 @@ vXYZ = [];
 dragF = [];
 factor = 0;
 accXYZ = [];
-
-_accelerationX = 0;
-_accelerationY = 0;
-_accelerationZ = 0;
+_acceleration = [0,0,0];
 //_velMag = sqrt((_initialVelocity select 0)^2 + (_initialVelocity select 1)^2 + (_initialVelocity select 2)^2);
 //projectile velocity in meters per second
-_totalVelocityX = (_velocityVec select 0) + (_initialVelocity select 0);
-_totalVelocityY = (_velocityVec select 1) + (_initialVelocity select 1);
-_totalVelocityZ = (_velocityVec select 2) + (_initialVelocity select 2);
+_totalVelocity = vectorAdd [_velocityVec, _initialVelocity];
 //_totalVelocityX = (_velocityVec select 0);
 //_totalVelocityY = (_velocityVec select 1);
 //_totalVelocityZ = (_velocityVec select 2);
@@ -57,7 +52,7 @@ numWithThrust = 0;
 
 _dt = _minResolution;
 _elapsedTime = 0;
-
+_v = _totalVelocity;
 _vx = _totalVelocityX;              // v begin with initial velocity
 _vy = _totalVelocityY;              // y begin with initial position
 _vz = _totalVelocityZ;
@@ -79,10 +74,7 @@ for "_i" from 1 to _maxIterations do {
 	//_dt = _dt max _minResolution;
 	_dt = (_i^-0.1)/8 max _minResolution;
 	_elapsedTime = _elapsedTime + _dt;
-
-	_ax = 0;
-	_ay = 0;
-	_az = 0;
+	_a = [0,0,0];
 /*
 	if(_elapsedTime < _thrustTTL) then {
 		_ax = _ax + (_accelerationV select 0);
@@ -99,34 +91,48 @@ for "_i" from 1 to _maxIterations do {
 
 
 	*/
-	_speedP2 = _vx^2 + _vy^2 + _vz^2;
+	_speedP2 = vectorMagnitudeSqr _v;
+	//_speedP2 = _vx^2 + _vy^2 + _vz^2;
 
 
 	//http://physics.gmu.edu/~amin/phys251/Topics/NumAnalysis/Odes/projectileMotion.html
-	_Vmagnitude = sqrt(abs _vx + abs _vy + abs _vz);
+	//_Vmagnitude = sqrt (vectorMagnitudeSqr _v);
+	//_Vmagnitude = sqrt(abs _vx + abs _vy + abs _vz);
 
 	//0.6 is a magic number to reduce the error caused by the euler's method
 	//0.5 would be the proper one I think.
 	_Vmagnitude = 0.6 * (sqrt(_speedP2))*-_airFriction;
 
- 	_FdragX = _Vmagnitude * _vx;
- 	_FdragY = _Vmagnitude * _vy;
- 	_FdragZ = _Vmagnitude * _vz;
- 	vXYZ = [_vx, _vy, _vz];
- 	dragF = [_FdragX, _FdragY, _FdragZ];
- 	accXYZ = [_ax, _ay, _az];
+	_Fdrag = vectorMultiply [_v, _Vmagnitude];
+
+ 	//_FdragX = _Vmagnitude * _vx;
+ 	//_FdragY = _Vmagnitude * _vy;
+ 	//_FdragZ = _Vmagnitude * _vz;
+ 	//vXYZ = [_vx, _vy, _vz];
+ 	//dragF = [_FdragX, _FdragY, _FdragZ];
+ 	//accXYZ = [_ax, _ay, _az];
 
 	//determine the velocity: v  ←  v + Δv = v + a*Δt
-	_vx = _vx + _dt * (_ax + _FdragX/_mass);
-	_vy = _vy + _dt * (_ay + _FdragY/_mass);
-	_vz = _vz + _dt * (_az + _FdragZ/_mass - _gravity/2);
+	_Fdrag = vectorMultiply [_Fdrag, (1/_mass)];
+	_Fdrag = vectorAdd [_a, _Fdrag];
+	_Fdrag = vectorAdd [0,0, -(_gravity/2)];
+	_deltaV = vectorMultiply [_Fdrag, _dt];
+
+	_v = vectorAdd [_v, _deltaV];
+
+	//_vx = _vx + _dt * (_ax + _FdragX/_mass);
+	//_vy = _vy + _dt * (_ay + _FdragY/_mass);
+	//_vz = _vz + _dt * (_az + _FdragZ/_mass - _gravity/2);
 
 	//determine the position: pos  ←  pos + Δpos = pos + v*Δt
-	_posX = _posX + _vx * _dt;
-	_posY = _posY + _vy * _dt;
-	_posZ = _posZ + _vz * _dt;
+	_deltaPos = vectorMultiply [_v, _dt];
+	_pos = vectorAdd [_pos, _deltaPos];
 
-	_potentialImpactPosASL = [_posX, _posY, _posZ];
+	//_posX = _posX + _vx * _dt;
+	//_posY = _posY + _vy * _dt;
+	//_posZ = _posZ + _vz * _dt;
+
+	_potentialImpactPosASL = _pos;
 
 	_positions = [_positions, _potentialImpactPosASL] call BIS_fnc_arrayPush;
 

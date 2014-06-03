@@ -9,23 +9,19 @@ _initialVelocity = _this select 4;
 _timeToLive = _this select 5;
 _gravity = 9.80665; //http://en.wikipedia.org/wiki/Standard_gravity
 
-if(surfaceNormal _pos) then {
-	_pos = ATLToASL;
-};
-
 private ["_posX","_posY","_posZ","_totalVelocityX","_totalVelocityY","_totalVelocityZ","_Vmag","_elapsedTime"];
 
 _elapsedTime = 0;
 
 //projectile velocity in meters per second
-_totalVelocity = vectorAdd [_velocityVec, _initialVelocity];
+_velocity = _velocityVec; //vectorAdd [_velocityVec, _initialVelocity];
 
 private ["_result","_altPos","_positions","_vectorM","_time"];
 
 _positions = [];
 _positions = [_positions,  _pos] call BIS_fnc_arrayPush;
 
-_minResolution = 0.05;
+_minResolution = 0.025;
 _maxResolution = 0.0125;
 _maxIterations = 512;
 
@@ -34,7 +30,7 @@ _result = [0,0,0];
 _maxIterations = GLOBAL_ITERATION_COUNT;
 _resultIndex = 0;
 _ATLPos = [];
-_dt = _minResolution;
+_dt = 0.025;
 _maxIterations = ceil (_timeToLive/_dt);
 _maxIterations = _maxIterations max 256;
 
@@ -48,34 +44,32 @@ for "_i" from 1 to _maxIterations do {
 	//be accurate with that worse resolution.
 	//_time = _maxResolution min (_i^-4);
 
-	_elapsedTime = _elapsedTime + _dt;
+	//_elapsedTime = _elapsedTime + _dt;
 	//Calculate vector magnitude so that velocity vectors are calculated properly
-	_vectorM = vectorMagnitude _totalVelocity;
+	_vectorM = vectorMagnitude _velocity;
 	_vectorM = _vectorM*_airFriction;
 
 	//Recalculate velocity at the current point in time
-	_totalVelocityX = _totalVelocityX + _dt * (_vectorM*_totalVelocityX);
-	_totalVelocityY = _totalVelocityY + _dt * (_vectorM*_totalVelocityY);
-	_totalVelocityZ = _totalVelocityZ + _dt * (_vectorM*_totalVelocityZ - _gravity);
+	_deltaVelocity = vectorMultiply [_velocity, _vectorM];
+	_deltaVelocity = vectorAdd [_deltaVelocity, [0,0, -_gravity]];
+	_deltaVelocity = vectorMultiply [_deltaVelocity, _dt];
+	_velocity = vectorAdd [_velocity, _deltaVelocity];
 
 	//Add recalculated position to previous position
-	_posX = _posX + _totalVelocityX*_dt;
-	_posY = _posY + _totalVelocityY*_dt;
-	_posZ = _posZ + _totalVelocityZ*_dt;
+	_deltaPos = vectorMultiply [_velocity, _dt];
+	_pos = vectorAdd [_pos, _deltaPos];
+	_positions = [_positions, _pos] call BIS_fnc_arrayPush;
 
-	_potentialImpactPosASL = [_posX, _posY, _posZ];
+	_ATLPos = _pos;
+
+	_ATLPos = ASLToATL _ATLPos;
 
 
-	_ATLPos = _potentialImpactPosASL;
-	if(surfaceIsWater _potentialImpactPosASL) then {
-		_ATLPos = ASLToATL _ATLPos;
-	};
-	_positions = [_positions, _ATLPos] call BIS_fnc_arrayPush;
 	if((_ATLPos select 2 ) < 0) exitWith {
 		_resultIndex = _i;
 	};
 
 };
 _result = _ATLPos;
-systemChat format["%1 - %2 ms", _resultIndex, (diag_tickTime - _startTime)];
+
 [_result, _positions];
