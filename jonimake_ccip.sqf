@@ -38,12 +38,7 @@ getDrawPos = {
 
     _vel = velocity _plane;
     _bulletVelVec = vectorMultiply [_vecDir, _initSpeed];
-/*
-    _bulletVelVec = [
-            (_vecDir select 0)*_initSpeed,
-            (_vecDir select 1)*_initSpeed,
-            (_vecDir select 2)*_initSpeed];
-*/
+
     _positions = [[0,0,0],[]];
     _providerPairs = (currentProvider select 1);
     _providerInfoPos = [_providerPairs, (currentWeapon currentPlane)] call BIS_fnc_findInPairs;
