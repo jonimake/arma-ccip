@@ -1,3 +1,5 @@
+#include "includes.sqf"
+
 private ["_velocityVec","_pos","_airFriction","_initialVelocity","_gravity", "_timeToLive"];
 
 //All of this is calculated in relation to the firer ASL pos
@@ -14,12 +16,14 @@ private ["_posX","_posY","_posZ","_totalVelocityX","_totalVelocityY","_totalVelo
 _elapsedTime = 0;
 
 //projectile velocity in meters per second
-_velocity = _velocityVec; //vectorAdd [_velocityVec, _initialVelocity];
+_velocity = vectorAdd [_velocityVec, _initialVelocity];
 
 private ["_result","_altPos","_positions","_vectorM","_time"];
 
 _positions = [];
+#ifdef TRACE
 _positions = [_positions,  _pos] call BIS_fnc_arrayPush;
+#endif
 
 _minResolution = 0.025;
 _maxResolution = 0.0125;
@@ -28,7 +32,7 @@ _maxIterations = 512;
 _result = [0,0,0];
 
 _maxIterations = GLOBAL_ITERATION_COUNT;
-_resultIndex = 0;
+_resultIndex = -1;
 _ATLPos = [];
 _dt = 0.025;
 _maxIterations = ceil (_timeToLive/_dt);
@@ -58,8 +62,10 @@ for "_i" from 1 to _maxIterations do {
 	//Add recalculated position to previous position
 	_deltaPos = vectorMultiply [_velocity, _dt];
 	_pos = vectorAdd [_pos, _deltaPos];
-	_positions = [_positions, _pos] call BIS_fnc_arrayPush;
 
+#ifdef TRACE
+	_positions = [_positions, _pos] call BIS_fnc_arrayPush;
+#endif
 	_ATLPos = _pos;
 
 	_ATLPos = ASLToATL _ATLPos;
@@ -72,4 +78,4 @@ for "_i" from 1 to _maxIterations do {
 };
 _result = _ATLPos;
 
-[_result, _positions];
+[_result, _resultIndex, _positions];

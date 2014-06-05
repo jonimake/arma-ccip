@@ -1,3 +1,5 @@
+#include "includes.sqf"
+
 private ["_velocityVec","_pos","_airFriction","_initialVelocity","_gravity","_thrust","_thrustTTL","_mass"];
 debugVel = [];
 

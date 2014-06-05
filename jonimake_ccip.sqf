@@ -1,8 +1,7 @@
 // CCIP script by Joni Mäkelä
 // For custom vehicles please provide a provider TODO description
+#include "includes.sqf"
 
-#define DEBUG
-#define TRACE
 GLOBAL_ITERATION_COUNT = 512;
 GLOBAL_DT = 0.01;
 
@@ -19,7 +18,7 @@ trajectoryPositions = [];
 currentPlane = objNull;
 fancyColors = [];
 currentProvider = [];
-
+result = -1;
 getImpactPos        = compile preprocessFileLineNumbers  "jonimake_ccip\getImpactPos.sqf";
 getImpactPosRocket  = compile preprocessFileLineNumbers  "jonimake_ccip\getImpactPosRocket.sqf";
 getImpactPosBomb    = compile preprocessFileLineNumbers  "jonimake_ccip\getImpactPosBomb.sqf";
@@ -73,7 +72,12 @@ calculateImpactPoint = {
     _info = currentPlane call getDrawPos;
     endTime = diag_tickTime;
     impactPos = _info select 0;
-    trajectoryPositions = _info select 1;
+    result = _info select 1;
+
+#ifdef TRACE
+    trajectoryPositions = _info select 2;
+#endif
+
 
   } else {
     CCIP_enabled = false;
@@ -82,6 +86,8 @@ calculateImpactPoint = {
 
 ccipDrawHandler = {
   if(CCIP_enabled) then {
+
+#ifdef TRACE
     if((count trajectoryPositions) > 1) then {
       for "_i" from 1 to ((count trajectoryPositions) - 1) do {
         _start = trajectoryPositions select (_i - 1);
@@ -101,13 +107,18 @@ ccipDrawHandler = {
         drawLine3D [_start, _end, _color];
       };
     };
+#endif
+
     ccipString = str (impactPos distance currentPlane);
     _drawPos = impactPos;
     //if(!surfaceIsWater _drawPos) then {
     //  _drawPos = ASLToATL _drawPos;
     //};
-
-    drawIcon3D [ccipIcon, ccipColor, _drawPos, 2, 2, 0, ccipString, 2, ccipFontSize];
+    _drawColor = ccipColor;
+    if(result < 0) then {
+        _drawColor = [1,.33,0,0.5]
+    };
+    drawIcon3D [ccipIcon, _drawColor, _drawPos, 2, 2, 0, ccipString, 2, ccipFontSize];
   };
 };
 
