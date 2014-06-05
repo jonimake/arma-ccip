@@ -34,7 +34,7 @@ _result = [0,0,0];
 _maxIterations = GLOBAL_ITERATION_COUNT;
 _resultIndex = -1;
 _ATLPos = [];
-_dt = 0.025;
+_dt = 0.05;
 _maxIterations = ceil (_timeToLive/_dt);
 _maxIterations = _maxIterations max 256;
 

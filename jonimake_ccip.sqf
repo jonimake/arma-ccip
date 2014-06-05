@@ -6,6 +6,17 @@ GLOBAL_ITERATION_COUNT = 512;
 GLOBAL_DT = 0.01;
 
 if(isDedicated) exitWith{}; //only run this on clients
+
+
+numSamples = 10;
+// _numSamples frame average so we need _numSamples samples
+posSamples = [];
+for "_i" from 1 to numSamples /* step +1 */ do {
+  posSamples = [posSamples,  [0,0,0]] call BIS_fnc_arrayPush;
+};
+sampleIndex = 0;
+sampleRatio = 1/numSamples;
+
 debugPos = [0,0,0];
 CCIP_enabled = false;
 ccipString = "";
@@ -65,6 +76,8 @@ getDrawPos = {
    _positions;
 };
 
+
+
 calculateImpactPoint = {
   if((currentWeapon currentPlane) in (currentProvider select 0)) then {
     CCIP_enabled = true;
@@ -73,6 +86,21 @@ calculateImpactPoint = {
     endTime = diag_tickTime;
     impactPos = _info select 0;
     result = _info select 1;
+    posSamples set [sampleIndex, impactPos];
+
+    _sumX = 0;
+    _sumY = 0;
+    _sumZ = 0;
+    {
+      _sumX = _sumX + (_x select 0);
+      _sumY = _sumY + (_x select 1);
+      _sumZ = _sumZ + (_x select 2);
+    } forEach posSamples;
+    impactPos = vectorMultiply [[_sumX, _sumY, _sumZ], sampleRatio];
+    sampleIndex = sampleIndex + 1;
+    if(sampleIndex > (numSamples-1)) then {
+      sampleIndex = 0;
+    };
 
 #ifdef TRACE
     trajectoryPositions = _info select 2;
