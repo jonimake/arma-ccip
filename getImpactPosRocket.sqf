@@ -30,7 +30,7 @@ _maxIterations = 512;
 
 _result = _pos;
 
-_maxIterations = GLOBAL_ITERATION_COUNT;
+_maxIterations = 256;
 _resultIndex = 0;
 
 _dt = _minResolution;
@@ -71,15 +71,14 @@ for "_i" from 1 to _maxIterations do {
 	//determine the position: pos  ←  pos + Δpos = pos + v*Δt
 	_deltaPos = vectorMultiply [_velocity, _dt];
 	_pos = vectorAdd [_pos, _deltaPos];
-	//_posX = _posX + _vx * _dt;
-	//_posY = _posY + _vy * _dt;
-	//_posZ = _posZ + _vz * _dt;
 
 #ifdef TRACE
 	_positions = [_positions, _pos] call BIS_fnc_arrayPush;
 #endif
-
-	_ATLPos = ASLToATL _pos;
+	_ATLPos = _pos;
+	if(!surfaceIsWater _ATLPos) then {
+		_ATLPos = ASLToATL _ATLPos;
+	};
 	if((_ATLPos select 2 ) < 0) exitWith {
 		_resultIndex = _i;
 	};

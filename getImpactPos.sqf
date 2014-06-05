@@ -3,13 +3,14 @@
 private ["_velocityVec","_pos","_airFriction","_initialVelocity","_gravity", "_timeToLive"];
 
 //All of this is calculated in relation to the firer ASL pos
-_velocityVec = _this select 0;
-_pos = _this select 1;
-_airFriction = _this select 2;
-_sideAirFriction = _this select 3;
-_initialVelocity = _this select 4;
-_timeToLive = _this select 5;
-_gravity = 9.80665; //http://en.wikipedia.org/wiki/Standard_gravity
+_velocityVec 		= _this select 0;
+_pos 				= _this select 1;
+_airFriction 		= _this select 2;
+_sideAirFriction 	= _this select 3;
+_initialVelocity 	= _this select 4;
+_timeToLive 		= _this select 5;
+
+_gravity = 9.80665;
 
 private ["_posX","_posY","_posZ","_totalVelocityX","_totalVelocityY","_totalVelocityZ","_Vmag","_elapsedTime"];
 
@@ -17,7 +18,6 @@ _elapsedTime = 0;
 
 //projectile velocity in meters per second
 _velocity = vectorAdd [_velocityVec, _initialVelocity];
-
 private ["_result","_altPos","_positions","_vectorM","_time"];
 
 _positions = [];
@@ -67,8 +67,10 @@ for "_i" from 1 to _maxIterations do {
 	_positions = [_positions, _pos] call BIS_fnc_arrayPush;
 #endif
 	_ATLPos = _pos;
+	if(!surfaceIsWater _ATLPos) then {
+		_ATLPos = ASLToATL _ATLPos;
+	};
 
-	_ATLPos = ASLToATL _ATLPos;
 
 
 	if((_ATLPos select 2 ) < 0) exitWith {
@@ -76,6 +78,7 @@ for "_i" from 1 to _maxIterations do {
 	};
 
 };
+
 _result = _ATLPos;
 
 [_result, _resultIndex, _positions];
