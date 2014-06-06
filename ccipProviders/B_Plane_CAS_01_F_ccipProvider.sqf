@@ -1,7 +1,6 @@
 _allowedWeapons = ["Rocket_04_HE_Plane_CAS_01_F","Rocket_04_AP_Plane_CAS_01_F","Gatling_30mm_Plane_CAS_01_F", "Bomb_04_Plane_CAS_01_F"];
 
 //weapon memory position name
-//???
 _gatlinInfo = "Gatling_barrels_end";
 _heRocketInfo = "Rocket_2";
 _apRocketInfo = "Rocket_1";
