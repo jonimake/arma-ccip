@@ -8,6 +8,12 @@ GLOBAL_DT = 0.01;
 if(isDedicated) exitWith{}; //only run this on clients
 
 
+//Variables for public usage across other scripts
+ccip_resultIndex = -1;
+ccip_impactPos = [0,0,0];
+
+
+
 numSamples = 10;
 // _numSamples frame average so we need _numSamples samples
 posSamples = [];
@@ -24,12 +30,12 @@ ccipColor = [0,1,0,0.5];
 ccipColor2 = [1,0,0,.5];
 ccipIcon = getText (configfile >> "CfgWeaponCursors" >> "arifle" >> "texture");//(configfile >> "CfgWeaponIcons" >> "srifle");
 ccipFontSize = 0.02 * SafeZoneW;
-impactPos = [0,0,0];
+
 trajectoryPositions = [];
 currentPlane = objNull;
 fancyColors = [];
 currentProvider = [];
-result = -1;
+
 getImpactPos        = compile preprocessFileLineNumbers  "jonimake_ccip\getImpactPos.sqf";
 getImpactPosRocket  = compile preprocessFileLineNumbers  "jonimake_ccip\getImpactPosRocket.sqf";
 getImpactPosBomb    = compile preprocessFileLineNumbers  "jonimake_ccip\getImpactPosBomb.sqf";
@@ -84,8 +90,8 @@ calculateImpactPoint = {
     startTime = diag_tickTime;
     _info = currentPlane call getDrawPos;
     endTime = diag_tickTime;
-    impactPos = _info select 0;
-    result = _info select 1;
+    ccip_impactPos = _info select 0;
+    ccip_resultIndex = _info select 1;
     posSamples set [sampleIndex, impactPos];
 
     _sumX = 0;
