@@ -90,9 +90,9 @@ calculateImpactPoint = {
     startTime = diag_tickTime;
     _info = currentPlane call getDrawPos;
     endTime = diag_tickTime;
-    ccip_impactPos = _info select 0;
+    _pos = _info select 0;
     ccip_resultIndex = _info select 1;
-    posSamples set [sampleIndex, impactPos];
+    posSamples set [sampleIndex, _pos];
 
     _sumX = 0;
     _sumY = 0;
@@ -102,7 +102,7 @@ calculateImpactPoint = {
       _sumY = _sumY + (_x select 1);
       _sumZ = _sumZ + (_x select 2);
     } forEach posSamples;
-    impactPos = vectorMultiply [[_sumX, _sumY, _sumZ], sampleRatio];
+    ccip_impactPos = vectorMultiply [[_sumX, _sumY, _sumZ], sampleRatio];
     sampleIndex = sampleIndex + 1;
     if(sampleIndex > (numSamples-1)) then {
       sampleIndex = 0;
@@ -143,13 +143,13 @@ ccipDrawHandler = {
     };
 #endif
 
-    ccipString = str (impactPos distance currentPlane);
-    _drawPos = impactPos;
+    ccipString = str (ccip_impactPos distance currentPlane);
+    _drawPos = ccip_impactPos;
     //if(!surfaceIsWater _drawPos) then {
     //  _drawPos = ASLToATL _drawPos;
     //};
     _drawColor = ccipColor;
-    if(result < 0) then {
+    if(ccip_resultIndex < 0) then {
         _drawColor = [1,.33,0,0.5]
     };
     drawIcon3D [ccipIcon, _drawColor, _drawPos, 2, 2, 0, ccipString, 2, ccipFontSize];
