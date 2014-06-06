@@ -88,7 +88,7 @@ for "_i" from 1 to _maxIterations do {
 	//determine the velocity: v  ←  v + Δv = v + a*Δt
 	_deltaV = vectorMultiply [_Fdrag, (1/_mass)];
 	_deltaV = vectorAdd [_a, _deltaV];
-	_deltaV = vectorAdd [_deltaV, [0,0,-_gravity]];
+	_deltaV = vectorAdd [_deltaV, [0,0,-(_gravity/2)]];
 	_deltaV = vectorMultiply [_deltaV, _dt];
 	_velocity = vectorAdd [_velocity, _deltaV];
 
