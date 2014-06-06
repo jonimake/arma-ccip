@@ -44,6 +44,11 @@ missionRoot
             B_Plane_CAS_01_F_ccipProvider.sqf
             O_Plane_CAS_02_F_ccipProvider.sqf
 ```
+Run the script by writing the following script into the vehicle init:
+```
+handle = this execVM "jonimake_ccip\jonimake_ccip.sqf"
+```
+This will add an event handler to the vehicle that triggers on "getIn" event. That in turn starts the ccip solver.
 
 Configuring allowed weapons
 --
