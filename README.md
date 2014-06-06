@@ -7,8 +7,13 @@ Who it is for?
 - Vehicle authors
 - Other modders
 
-The script only calculates the impact point. There is no fancy HUD showing the impact point reticle (except for debugging purposes). This means it isn't really suitable for just plugging into your mission or for other general play.
-
+The script only calculates the impact point. There is no fancy HUD showing the impact point reticle (except for debugging purposes). This means it isn't really suitable for just plugging into your mission or for other general play. The script provides two variables that can be accessed to get the impact point information:
+```
+//these are subject to change
+ccip_impactPos		- contains the impact position in ASL format
+ccip_resultIndex	- Value will be -1 if no impact point could be solved during the iteration.
+			  		  Otherwise the value will indicate which step of the Euler's method was below the ground.
+```
 How does it work?
 --
 Approximation is done by using Euler's method to solve the projectile  motion.
