@@ -28,6 +28,7 @@ The following ammo types are supported more or less:
 
 Installing and usage
 --
+You just need to download the script files to your mission root so that the main function is in jonimake_ccip folder inside the mission root.
 The script package has been tested with the following folder structure:
 ```sh
 missionRoot
@@ -56,7 +57,11 @@ In order to enable CCIP on a certain aircraft, you have to define all CCIP compa
 
 For example, the BLUFOR jet would use a file called B_Plane_CAS_01_F_ccipProvider.sqf of which you can find an example below.
 ```sqf
-_allowedWeapons = ["Rocket_04_HE_Plane_CAS_01_F","Rocket_04_AP_Plane_CAS_01_F","Gatling_30mm_Plane_CAS_01_F", "Bomb_04_Plane_CAS_01_F"];
+_allowedWeapons = [
+"Rocket_04_HE_Plane_CAS_01_F",
+"Rocket_04_AP_Plane_CAS_01_F",
+"Gatling_30mm_Plane_CAS_01_F",
+"Bomb_04_Plane_CAS_01_F"];
 
 //weapon memory position name
 _gatlinInfo = "Gatling_barrels_end";
@@ -71,6 +76,7 @@ _pairs = [_pairs,"Rocket_04_HE_Plane_CAS_01_F",_heRocketInfo,false] call BIS_fnc
 _pairs = [_pairs,"Rocket_04_AP_Plane_CAS_01_F",_apRocketInfo,false] call BIS_fnc_addToPairs;
 
 [_allowedWeapons , _pairs];
+
 ```
 
 License
