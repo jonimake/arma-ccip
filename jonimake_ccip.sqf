@@ -11,7 +11,7 @@ if(isDedicated) exitWith{}; //only run this on clients
 //Variables for public usage across other scripts
 ccip_resultIndex = -1;
 ccip_impactPos = [0,0,0];
-
+ccip_enabled = false;
 
 
 numSamples = 10;
@@ -23,8 +23,9 @@ for "_i" from 1 to numSamples /* step +1 */ do {
 sampleIndex = 0;
 sampleRatio = 1/numSamples;
 
+
 debugPos = [0,0,0];
-CCIP_enabled = false;
+
 ccipString = "";
 ccipColor = [0,1,0,0.5];
 ccipColor2 = [1,0,0,.5];
@@ -86,7 +87,7 @@ getDrawPos = {
 
 calculateImpactPoint = {
   if((currentWeapon currentPlane) in (currentProvider select 0)) then {
-    CCIP_enabled = true;
+    ccip_enabled = true;
     startTime = diag_tickTime;
     _info = currentPlane call getDrawPos;
     endTime = diag_tickTime;
@@ -114,12 +115,12 @@ calculateImpactPoint = {
 
 
   } else {
-    CCIP_enabled = false;
+    ccip_enabled = false;
   };
 };
 
 ccipDrawHandler = {
-  if(CCIP_enabled) then {
+  if(ccip_enabled) then {
 
 #ifdef TRACE
     if((count trajectoryPositions) > 1) then {

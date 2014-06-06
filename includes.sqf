@@ -4,4 +4,4 @@
 #define	DEBUG
 
 //draw ccip solver trace line, note that this also needs DEBUG to be enabled
-//#define TRACE
+#define TRACE

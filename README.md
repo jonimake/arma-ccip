@@ -14,6 +14,8 @@ ccip_impactPos		- contains the impact position in ASL format
 ccip_resultIndex	- Value will be -1 if no impact point could be solved during the iteration.
 			  		  Otherwise the value will indicate which step of the Euler's method was below the ground.
 ```
+Vehicle authors and other mod makers should only need to read these two variables in order to create a proper HUD for their aircraft.
+
 How does it work?
 --
 Approximation is done by using Euler's method to solve the projectile  motion.
