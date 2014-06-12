@@ -1,9 +1,7 @@
 // CCIP script by Joni Mäkelä
 // For custom vehicles please provide a provider TODO description
 #include "includes.sqf"
-
-GLOBAL_ITERATION_COUNT = 512;
-GLOBAL_DT = 0.01;
+ccip_iterations = 512;
 
 if(isDedicated) exitWith{}; //only run this on clients
 
@@ -13,6 +11,7 @@ ccip_resultIndex = -1;
 ccip_impactPos = [0,0,0];
 ccip_enabled = false;
 
+ccip_hasEventHandler = false;
 
 numSamples = 10;
 // _numSamples frame average so we need _numSamples samples
@@ -24,17 +23,22 @@ sampleIndex = 0;
 sampleRatio = 1/numSamples;
 
 
-debugPos = [0,0,0];
-
+#ifdef DEBUG
 ccipString = "";
 ccipColor = [0,1,0,0.5];
 ccipColor2 = [1,0,0,.5];
 ccipIcon = getText (configfile >> "CfgWeaponCursors" >> "arifle" >> "texture");//(configfile >> "CfgWeaponIcons" >> "srifle");
-ccipFontSize = 0.02 * SafeZoneW;
+ccipFontSize = 0.0175 * SafeZoneW;
+ccipIconHeight = 1;
+ccipIconWidth = 1;
+#endif
+
+#ifdef WEAPON_POS_DEBUG
+gunPosSphere = "Sign_Sphere100cm_F" createVehicleLocal [0,0,0];
+#endif
 
 trajectoryPositions = [];
 currentPlane = objNull;
-fancyColors = [];
 currentProvider = [];
 
 getImpactPos        = compile preprocessFileLineNumbers  "jonimake_ccip\getImpactPos.sqf";
@@ -54,19 +58,29 @@ getDrawPos = {
     _vecDir =_plane weaponDirection (currentWeapon _plane);
 
     _vel = velocity _plane;
-    _bulletVelVec = vectorMultiply [_vecDir, _initSpeed];
+    _bulletVelVec = _vecDir vectorMultiply _initSpeed;
 
     _positions = [[0,0,0],[]];
     _providerPairs = (currentProvider select 1);
-    _providerInfoPos = [_providerPairs, (currentWeapon currentPlane)] call BIS_fnc_findInPairs;
+    _providerInfoPos = [_providerPairs, (currentWeapon _plane)] call BIS_fnc_findInPairs;
 
     _providerInfo = _providerPairs select _providerInfoPos;
-    _gunName = _providerInfo select 1;
-    _gunPos = _plane modelToWorld (_plane selectionPosition _gunName);//this is in getPos format?
+    _fnGetWeaponModelSpacePos = _providerInfo select 1;
+    _modelSpaceGunPos = _plane call _fnGetWeaponModelSpacePos;
+
+    //following line tries to mend some weirdness with the modelToWorld offset when moving
+    _modelSpaceGunPos = _modelSpaceGunPos vectorAdd  ((velocityModelSpace _plane) vectorMultiply -0.11);
+    _gunPos = _plane modelToWorld _modelSpaceGunPos;
+
+
     if(!surfaceIsWater _gunPos) then {
       _gunPos = ATLToASL _gunPos;
     };
-    debugPos = _gunPos;
+
+    #ifdef WEAPON_POS_DEBUG
+      gunPosSphere setPosASL _gunPos;
+    #endif
+
     if(_ammoName isKindOf "MissileCore") then {
       _thrust    = getNumber(configFile >> "CfgAmmo" >> _ammoName >> "thrust");
       _thrustTTL = getNumber(configFile >> "CfgAmmo" >> _ammoName >> "thrustTime");
@@ -95,15 +109,11 @@ calculateImpactPoint = {
     ccip_resultIndex = _info select 1;
     posSamples set [sampleIndex, _pos];
 
-    _sumX = 0;
-    _sumY = 0;
-    _sumZ = 0;
+    _sum = [0,0,0];
     {
-      _sumX = _sumX + (_x select 0);
-      _sumY = _sumY + (_x select 1);
-      _sumZ = _sumZ + (_x select 2);
+      _sum = _sum vectorAdd _x;
     } forEach posSamples;
-    ccip_impactPos = vectorMultiply [[_sumX, _sumY, _sumZ], sampleRatio];
+    ccip_impactPos = _sum vectorMultiply sampleRatio;
     sampleIndex = sampleIndex + 1;
     if(sampleIndex > (numSamples-1)) then {
       sampleIndex = 0;
@@ -112,8 +122,6 @@ calculateImpactPoint = {
 #ifdef TRACE
     trajectoryPositions = _info select 2;
 #endif
-
-
   } else {
     ccip_enabled = false;
   };
@@ -144,7 +152,11 @@ ccipDrawHandler = {
     };
 #endif
 
-    ccipString = str (ccip_impactPos distance currentPlane);
+    _distance = ccip_impactPos distance currentPlane;
+    _distance = _distance / 10;
+    _distance = floor _distance;
+    _distance = _distance * 10;
+    ccipString = str _distance;
     _drawPos = ccip_impactPos;
     //if(!surfaceIsWater _drawPos) then {
     //  _drawPos = ASLToATL _drawPos;
@@ -153,34 +165,48 @@ ccipDrawHandler = {
     if(ccip_resultIndex < 0) then {
         _drawColor = [1,.33,0,0.5]
     };
-    drawIcon3D [ccipIcon, _drawColor, _drawPos, 2, 2, 0, ccipString, 2, ccipFontSize];
+    drawIcon3D [ccipIcon, _drawColor, _drawPos, ccipIconWidth, ccipIconHeight, 0, ccipString, 2, ccipFontSize];
   };
 };
 
-CCIP_main = {
-  _plane = _this;
-  if(isPlayer (driver _plane)) then {
+ccip_shutdown = {
+  if(ccip_hasEventHandler) then {
+    ["ccip_frameHandler", "onEachFrame"] call BIS_fnc_removeStackedEventHandler;
+    ccip_hasEventHandler = false;
+  };
+};
+
+ccip_start = {
+  _plane = _this select 0;
+  _engineState = _this select 1;
+  if(!_engineState) exitWith {
+    call ccip_shutdown;
+  };
+  if(isPlayer (driver _plane) && ! ccip_hasEventHandler) then {
     currentPlane = _plane;
     _providerFileName =  "jonimake_ccip\ccipProviders\" + (typeOf _plane + "_ccipProvider.sqf");
     systemChat _providerFileName;
     currentProvider = call compile preprocessFileLineNumbers _providerFileName; //returns a pairs array (hashmap/dictionary of some sorts)
-
-    onEachFrame {
-      call calculateImpactPoint;
-  #ifdef DEBUG
-      call ccipDrawHandler;
-  #endif
-    };
+    ["ccip_frameHandler", "onEachFrame", {
+       call calculateImpactPoint;
+        #ifdef DEBUG
+          call ccipDrawHandler;
+        #endif
+    }] call BIS_fnc_addStackedEventHandler;
+    ccip_hasEventHandler = true;
   };
 };
 
 if(_this isKindOf "plane") then {
-  systemChat str _this;
-  _plane = _this;
-  _ccipHandle = _this addEventHandler ["GetIn", {_nil = (_this select 0) spawn CCIP_main;}];
-  if(isPlayer (driver _plane)) then { //this handles starting mission in a plane without getting in
-    _this spawn CCIP_main;
-  };
+  _getOutHandle = _this addEventHandler ["GetOut", {_this spawn ccip_shutdown}];
+  _startHandle = _this addEventHandler ["Engine", {[(_this select 0), (_this select 1)] spawn ccip_start}];
+  if(isPlayer driver _this) then {
+    systemChat ("there is a player in this = " + (str _this));
+    _handle = [_this, isEngineOn _this] spawn ccip_start;
+  } else {
+    systemChat ("there is no player in this = " + (str _this));
+  }
+
 } else {
   hint "Can only execute ccip script on planes";
 };

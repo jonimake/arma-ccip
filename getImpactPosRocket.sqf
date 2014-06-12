@@ -15,9 +15,9 @@ _gravity = 9.80665; //http://en.wikipedia.org/wiki/Standard_gravity
 
 
 //projectile velocity in meters per second
-_velocity = vectorAdd [_velocityVec, _initialVelocity];
+_velocity = _velocityVec vectorAdd _initialVelocity;
 _gunUnitV = _velocityVec call BIS_fnc_unitVector;
-_accelerationV = vectorMultiply [_gunUnitV, _thrust];
+_accelerationV = _gunUnitV vectorMultiply _thrust;
 
 _positions = [];
 #ifdef TRACE
@@ -43,34 +43,30 @@ private "_startTime";
 _startTime = diag_tickTime;
 
 for "_i" from 1 to _maxIterations do {
-	private["_ax","_ay","_az"];
+	private["_a"];
 	_dt = (_i^-0.1)/8 max _minResolution;
 	_elapsedTime = _elapsedTime + _dt;
 	_a = [0,0,0];
 
 	if(_elapsedTime < _thrustTTL) then {
-		_a = vectorAdd [_a, _accelerationV];
+		_a = _accelerationV;
 	};
 
 	//http://physics.gmu.edu/~amin/phys251/Topics/NumAnalysis/Odes/projectileMotion.html
 	_Vmagnitude = sqrt vectorMagnitude _velocity;
 	//0.6 is a magic number to reduce the error caused by the Euler method
-	//0.5 would be the proper one I think.
 	_Vmagnitude = 0.6 * _Vmagnitude*-_airFriction;
-	_Fdrag = vectorMultiply [_velocity, _Vmagnitude];
+	_Fdrag = _velocity vectorMultiply _Vmagnitude;
 
+	//determine the velocity
+	_deltaV = _Fdrag vectorMultiply (1/_mass);
+	_deltaV = _a vectorAdd _deltaV;
+	_deltaV = _deltaV vectorAdd  [0,0,-_gravity];
+	_deltaV = _deltaV vectorMultiply _dt;
+	_velocity = _velocity vectorAdd _deltaV;
 
-	//determine the velocity: v  ←  v + Δv = v + a*Δt
-	_deltaV = vectorMultiply [_Fdrag, (1/_mass)];
-	_deltaV = vectorAdd [_a, _deltaV];
-	_deltaV = vectorAdd [_deltaV, [0,0,-_gravity]];
-	_deltaV = vectorMultiply [_deltaV, _dt];
-	_velocity = vectorAdd [_velocity, _deltaV];
-
-
-	//determine the position: pos  ←  pos + Δpos = pos + v*Δt
-	_deltaPos = vectorMultiply [_velocity, _dt];
-	_pos = vectorAdd [_pos, _deltaPos];
+	_deltaPos = _velocity vectorMultiply _dt;
+	_pos = _pos vectorAdd _deltaPos;
 
 #ifdef TRACE
 	_positions = [_positions, _pos] call BIS_fnc_arrayPush;
