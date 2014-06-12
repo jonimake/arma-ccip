@@ -185,7 +185,6 @@ ccip_start = {
   if(isPlayer (driver _plane) && ! ccip_hasEventHandler) then {
     currentPlane = _plane;
     _providerFileName =  "jonimake_ccip\ccipProviders\" + (typeOf _plane + "_ccipProvider.sqf");
-    systemChat _providerFileName;
     currentProvider = call compile preprocessFileLineNumbers _providerFileName; //returns a pairs array (hashmap/dictionary of some sorts)
     ["ccip_frameHandler", "onEachFrame", {
        call calculateImpactPoint;
@@ -201,12 +200,6 @@ if(_this isKindOf "plane") then {
   _getOutHandle = _this addEventHandler ["GetOut", {_this spawn ccip_shutdown}];
   _startHandle = _this addEventHandler ["Engine", {[(_this select 0), (_this select 1)] spawn ccip_start}];
   if(isPlayer driver _this) then {
-    systemChat ("there is a player in this = " + (str _this));
     _handle = [_this, isEngineOn _this] spawn ccip_start;
-  } else {
-    systemChat ("there is no player in this = " + (str _this));
-  }
-
-} else {
-  hint "Can only execute ccip script on planes";
+  };
 };
