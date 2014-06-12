@@ -5,10 +5,21 @@ _allowedWeapons = [
 "Bomb_04_Plane_CAS_01_F"];
 
 //weapon memory position name
-_gatlinInfo = "Gatling_barrels_end";
-_heRocketInfo = "Rocket_2";
-_apRocketInfo = "Rocket_1";
-_bombInfo = "pos cargo";
+_gatlinInfo = {
+	_this selectionPosition "Gatling_barrels_end";
+};
+
+_heRocketInfo = {
+	[5.3,1.5,-0.5];
+};
+
+_apRocketInfo = {
+	[-5.3,1.5,-0.5];
+};
+
+_bombInfo = {
+	[0,0,-1];
+};
 
 _pairs = [];
 _pairs = [_pairs,"Bomb_04_Plane_CAS_01_F",_bombInfo,false] call BIS_fnc_addToPairs;

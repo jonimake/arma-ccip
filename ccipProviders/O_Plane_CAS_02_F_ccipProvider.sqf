@@ -4,10 +4,10 @@ _allowedWeapons = [
 "Rocket_03_AP_Plane_CAS_02_F",
 "Bomb_03_Plane_CAS_02_F"];
 
-_gatlinInfo = "Cannon_barrel_end";
-_heRocketInfo = "Rocket_2"; //right rocket
-_apRocketInfo = "Rocket_1"; //left rocket
-_bombInfo = "N/A";
+_gatlinInfo = {_this selectionPosition "Cannon_barrel_end"};
+_heRocketInfo = {_this selectionPosition "Rocket_2"}; //right rocket
+_apRocketInfo = {_this selectionPosition "Rocket_1"}; //left rocket
+_bombInfo = {[0,0,1]};
 
 _pairs = [];
 

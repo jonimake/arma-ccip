@@ -17,7 +17,7 @@ private ["_posX","_posY","_posZ","_totalVelocityX","_totalVelocityY","_totalVelo
 _elapsedTime = 0;
 
 //projectile velocity in meters per second
-_velocity = vectorAdd [_velocityVec, _initialVelocity];
+_velocity = _velocityVec vectorAdd _initialVelocity;
 private ["_result","_altPos","_positions","_vectorM","_time"];
 
 _positions = [];
@@ -36,8 +36,8 @@ _resultIndex = -1;
 _ATLPos = [];
 _dt = 0.05;
 _maxIterations = ceil (_timeToLive/_dt);
-_maxIterations = _maxIterations max 256;
-
+//_maxIterations = _maxIterations max 256;
+//
 private "_startTime";
 _startTime = diag_tickTime;
 for "_i" from 1 to _maxIterations do {
@@ -54,14 +54,14 @@ for "_i" from 1 to _maxIterations do {
 	_vectorM = _vectorM*_airFriction;
 
 	//Recalculate velocity at the current point in time
-	_deltaVelocity = vectorMultiply [_velocity, _vectorM];
-	_deltaVelocity = vectorAdd [_deltaVelocity, [0,0, -_gravity]];
-	_deltaVelocity = vectorMultiply [_deltaVelocity, _dt];
-	_velocity = vectorAdd [_velocity, _deltaVelocity];
+	_deltaVelocity = _velocity vectorMultiply _vectorM;
+	_deltaVelocity = _deltaVelocity vectorAdd  [0,0, -_gravity];
+	_deltaVelocity = _deltaVelocity vectorMultiply _dt;
+	_velocity = _velocity vectorAdd _deltaVelocity;
 
 	//Add recalculated position to previous position
-	_deltaPos = vectorMultiply [_velocity, _dt];
-	_pos = vectorAdd [_pos, _deltaPos];
+	_deltaPos = _velocity vectorMultiply _dt;
+	_pos = _pos vectorAdd _deltaPos;
 
 #ifdef TRACE
 	_positions = [_positions, _pos] call BIS_fnc_arrayPush;
@@ -70,8 +70,6 @@ for "_i" from 1 to _maxIterations do {
 	if(!surfaceIsWater _ATLPos) then {
 		_ATLPos = ASLToATL _ATLPos;
 	};
-
-
 
 	if((_ATLPos select 2 ) < 0) exitWith {
 		_resultIndex = _i;

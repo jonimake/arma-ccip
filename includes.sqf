@@ -4,4 +4,7 @@
 #define	DEBUG
 
 //draw ccip solver trace line, note that this also needs DEBUG to be enabled
-#define TRACE
+//#define TRACE
+
+//visualize weapon position on aircraft
+//#define WEAPON_POS_DEBUG
