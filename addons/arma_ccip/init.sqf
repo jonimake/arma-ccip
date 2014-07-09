@@ -200,15 +200,21 @@ ccip_start = {
   };
 };
 
-private "_plane";
-_plane = vehicle player;
+// Main entry point below
 
-if(_plane isKindOf "plane") then {
-  _getOutHandle = _plane addEventHandler ["GetOut", {_this spawn ccip_shutdown}];
+while {true} do {
+  // Check every 1 sec if player is in a plane
+  waitUntil { sleep 1; vehicle player != player && {(vehicle player) isKindOf "plane"} };
 
-  if(isEngineOn _plane) then {
-    _handle = [_plane, true] spawn ccip_start;
+  private "_vehicle";
+  _vehicle = vehicle player;
+
+  _getOutHandle = _vehicle addEventHandler ["GetOut", {_this spawn ccip_shutdown}];
+
+  if(isEngineOn _vehicle) then {
+    _handle = [_vehicle, true] spawn ccip_start;
   } else {
-    _startHandle = _plane addEventHandler ["Engine", {[(_this select 0), (_this select 1)] spawn ccip_start}];
+    _startHandle = _vehicle addEventHandler ["Engine", {[(_this select 0), (_this select 1)] spawn ccip_start}];
   };
 };
+
