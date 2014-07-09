@@ -1,5 +1,8 @@
 // CCIP script by Joni Mäkelä
+// Addon version by Lars Storjord
+//
 // For custom vehicles please provide a provider TODO description
+
 #include "includes.sqf"
 ccip_iterations = 512;
 
@@ -27,7 +30,7 @@ sampleRatio = 1/numSamples;
 ccipString = "";
 ccipColor = [0,1,0,0.5];
 ccipColor2 = [1,0,0,.5];
-ccipIcon = getText (configfile >> "CfgWeaponCursors" >> "arifle" >> "texture");//(configfile >> "CfgWeaponIcons" >> "srifle");
+ccipIcon = getText (configfile >> "CfgWeaponCursors" >> "arifle" >> "texture");
 ccipFontSize = 0.0175 * SafeZoneW;
 ccipIconHeight = 1;
 ccipIconWidth = 1;
@@ -41,9 +44,9 @@ trajectoryPositions = [];
 currentPlane = objNull;
 currentProvider = [];
 
-getImpactPos        = compile preprocessFileLineNumbers  "jonimake_ccip\getImpactPos.sqf";
-getImpactPosRocket  = compile preprocessFileLineNumbers  "jonimake_ccip\getImpactPosRocket.sqf";
-getImpactPosBomb    = compile preprocessFileLineNumbers  "jonimake_ccip\getImpactPosBomb.sqf";
+getImpactPos        = compile preprocessFileLineNumbers  "arma_ccip\getImpactPos.sqf";
+getImpactPosRocket  = compile preprocessFileLineNumbers  "arma_ccip\getImpactPosRocket.sqf";
+getImpactPosBomb    = compile preprocessFileLineNumbers  "arma_ccip\getImpactPosBomb.sqf";
 
 getDrawPos = {
     _plane = _this;
@@ -177,6 +180,7 @@ ccip_shutdown = {
 };
 
 ccip_start = {
+  private "_plane";
   _plane = _this select 0;
   _engineState = _this select 1;
   if(!_engineState) exitWith {
@@ -184,7 +188,7 @@ ccip_start = {
   };
   if(isPlayer (driver _plane) && ! ccip_hasEventHandler) then {
     currentPlane = _plane;
-    _providerFileName =  "jonimake_ccip\ccipProviders\" + (typeOf _plane + "_ccipProvider.sqf");
+    _providerFileName =  "arma_ccip\ccipProviders\" + (typeOf _plane + "_ccipProvider.sqf");
     currentProvider = call compile preprocessFileLineNumbers _providerFileName; //returns a pairs array (hashmap/dictionary of some sorts)
     ["ccip_frameHandler", "onEachFrame", {
        call calculateImpactPoint;
@@ -196,10 +200,15 @@ ccip_start = {
   };
 };
 
-if(_this isKindOf "plane") then {
-  _getOutHandle = _this addEventHandler ["GetOut", {_this spawn ccip_shutdown}];
-  _startHandle = _this addEventHandler ["Engine", {[(_this select 0), (_this select 1)] spawn ccip_start}];
-  if(isPlayer driver _this) then {
-    _handle = [_this, isEngineOn _this] spawn ccip_start;
+private "_plane";
+_plane = vehicle player;
+
+if(_plane isKindOf "plane") then {
+  _getOutHandle = _plane addEventHandler ["GetOut", {_this spawn ccip_shutdown}];
+
+  if(isEngineOn _plane) then {
+    _handle = [_plane, true] spawn ccip_start;
+  } else {
+    _startHandle = _plane addEventHandler ["Engine", {[(_this select 0), (_this select 1)] spawn ccip_start}];
   };
 };
