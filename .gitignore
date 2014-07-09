@@ -2,6 +2,7 @@
 ## ArmA specific
 #################
 *.sqm
+*.pbo
 
 #################
 ## Eclipse
