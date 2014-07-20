@@ -87,7 +87,7 @@ getDrawPos = {
       _positions = [_bulletVelVec, _gunPos, _airFriction, _sideAirFriction, _vel, _timeToLive, _thrust, _thrustTTL, _mass] call getImpactPosRocket;
     };
 
-    if(_ammoName isKindOf "BulletCore") then {
+    if(_ammoName isKindOf "BulletCore" || _ammoName isKindOf "SubMunitionCore") then {
       _positions = [_bulletVelVec, _gunPos, _airFriction, _sideAirFriction, _vel, _timeToLive] call getImpactPos;
     };
 
@@ -196,7 +196,7 @@ ccip_start = {
   };
 };
 
-if(_this isKindOf "plane") then {
+if(_this isKindOf "plane" || _this isKindOf "Helicopter") then {
   _getOutHandle = _this addEventHandler ["GetOut", {_this spawn ccip_shutdown}];
   _startHandle = _this addEventHandler ["Engine", {[(_this select 0), (_this select 1)] spawn ccip_start}];
   if(isPlayer driver _this) then {
