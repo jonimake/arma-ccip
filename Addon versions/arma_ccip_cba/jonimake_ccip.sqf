@@ -3,8 +3,7 @@
 #include "includes.sqf"
 ccip_iterations = 512;
 
-if(isDedicated) exitWith{}; //only run this on clients
-
+systemchat "CCIP script Initialized";
 
 //Variables for public usage across other scripts
 ccip_resultIndex = -1;
@@ -41,9 +40,9 @@ trajectoryPositions = [];
 currentPlane = objNull;
 currentProvider = [];
 
-getImpactPos        = compile preprocessFileLineNumbers  "jonimake_ccip\getImpactPos.sqf";
-getImpactPosRocket  = compile preprocessFileLineNumbers  "jonimake_ccip\getImpactPosRocket.sqf";
-getImpactPosBomb    = compile preprocessFileLineNumbers  "jonimake_ccip\getImpactPosBomb.sqf";
+getImpactPos        = compile preprocessFileLineNumbers  "\ArmA_CCIP_CBA\getImpactPos.sqf";
+getImpactPosRocket  = compile preprocessFileLineNumbers  "\ArmA_CCIP_CBA\getImpactPosRocket.sqf";
+getImpactPosBomb    = compile preprocessFileLineNumbers  "\ArmA_CCIP_CBA\getImpactPosBomb.sqf";
 
 getDrawPos = {
     _plane = _this;
@@ -87,7 +86,7 @@ getDrawPos = {
       _positions = [_bulletVelVec, _gunPos, _airFriction, _sideAirFriction, _vel, _timeToLive, _thrust, _thrustTTL, _mass] call getImpactPosRocket;
     };
 
-    if(_ammoName isKindOf "BulletCore") then {
+    if(_ammoName isKindOf "BulletCore" || _ammoName isKindOf "SubMunitionCore") then {
       _positions = [_bulletVelVec, _gunPos, _airFriction, _sideAirFriction, _vel, _timeToLive] call getImpactPos;
     };
 
@@ -184,7 +183,7 @@ ccip_start = {
   };
   if(isPlayer (driver _plane) && ! ccip_hasEventHandler) then {
     currentPlane = _plane;
-    _providerFileName =  "jonimake_ccip\ccipProviders\" + (typeOf _plane + "_ccipProvider.sqf");
+    _providerFileName =  "\ArmA_CCIP_CBA\ccipProviders\" + (typeOf _plane + "_ccipProvider.sqf");
     currentProvider = call compile preprocessFileLineNumbers _providerFileName; //returns a pairs array (hashmap/dictionary of some sorts)
     ["ccip_frameHandler", "onEachFrame", {
        call calculateImpactPoint;
@@ -193,13 +192,5 @@ ccip_start = {
         #endif
     }] call BIS_fnc_addStackedEventHandler;
     ccip_hasEventHandler = true;
-  };
-};
-
-if(_this isKindOf "plane") then {
-  _getOutHandle = _this addEventHandler ["GetOut", {_this spawn ccip_shutdown}];
-  _startHandle = _this addEventHandler ["Engine", {[(_this select 0), (_this select 1)] spawn ccip_start}];
-  if(isPlayer driver _this) then {
-    _handle = [_this, isEngineOn _this] spawn ccip_start;
   };
 };

@@ -7,7 +7,7 @@ _allowedWeapons = [
 _gatlinInfo = {_this selectionPosition "Cannon_barrel_end"};
 _heRocketInfo = {_this selectionPosition "Rocket_2"}; //right rocket
 _apRocketInfo = {_this selectionPosition "Rocket_1"}; //left rocket
-_bombInfo = {[0,0,1]};
+_bombInfo = {[0,0,-2]};
 
 _pairs = [];
 

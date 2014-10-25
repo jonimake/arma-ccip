@@ -1,0 +1,9 @@
+Respawn = "BASE";
+RespawnDelay = 15;
+respawnDialog = 1;
+respawnTemplates[] = {"Base","Counter"};
+
+briefing = 0;
+debriefing=1;
+disabledAI = 1;
+enableDebugConsole = 1;
