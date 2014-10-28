@@ -16,7 +16,10 @@ _vehiclelist=
     "O_Plane_CAS_02_F",
     "I_Plane_Fighter_03_CAS_F",
     "I_Plane_Fighter_03_AA_F",
-    "JS_JC_FA18E"
+    "JS_JC_FA18E",
+    "JS_JC_FA18F",
+    "Peral_A10C",
+    "STI_A10A"
     ];
 
 if ((typeOf (vehicle player) in _userslist) || (count _userslist == 0)) then {
