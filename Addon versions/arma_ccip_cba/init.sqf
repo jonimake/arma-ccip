@@ -20,6 +20,8 @@ _vehiclelist=
     "I_Plane_Fighter_03_AA_F",
     "JS_JC_FA18E",
     "JS_JC_FA18F",
+    "JS_JC_FA18E_NEW",
+    "JS_JC_FA18F_NEW",
     "Peral_A10C",
     "STI_A10A"
     ];
