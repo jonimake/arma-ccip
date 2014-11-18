@@ -5,7 +5,6 @@ if ((hasInterface) && !(isClass(configFile >> "CfgPatches" >> "ArmA_CCIP_CBA")))
 
 _CCIP_init = execVM "\ArmA_CCIP\jonimake_ccip.sqf";
 
-waitUntil {sleep 0.1; scriptDone _CCIP_init;};
 
 private ["_userslist","_vehiclelist"];
 

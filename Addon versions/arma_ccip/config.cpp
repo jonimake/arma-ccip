@@ -14,11 +14,11 @@ class CfgFunctions
 	{
 		class ArmA_CCIP 
 		{
-			class _init
-			{
-				file = "\ArmA_CCIP\init.sqf";
-				postInit = 1;
-			};
+      file = "functions";
+      class init {postInit = 1;};
+      class getImpactPos;
+      class getImpactPosBomb;
+      class getImpactPosRocket;
 		};
 	};
 };
