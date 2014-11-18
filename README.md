@@ -2,7 +2,7 @@ CCIP
 =========
 
 For the old script version see:  
-https://github.com/eRazeri/arma-ccip  
+https://github.com/eRazeri/CCIP/tree/old  
 
 NOTICE:
 This is a heavy WIP and will probably not work as of yet!
