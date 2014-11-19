@@ -46,8 +46,5 @@ class CfgVehicles
             {"js_w_fa18_GBU32BombLauncher",{0,0,-1}},
             {"js_w_fa18_GBU38BombLauncher",{0,0,-1}}
         };
-    };
-    
-    
-    
+    };    
 };
