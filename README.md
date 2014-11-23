@@ -4,8 +4,8 @@ CCIP
 For the old script version see:  
 https://github.com/eRazeri/CCIP/tree/old  
 
-For the original script version see:
-https://github.com/jonimake/arma-ccip
+For the original script version see:  
+https://github.com/jonimake/arma-ccip  
 
 NOTICE:
 This is a heavy WIP and will probably not work as of yet!
