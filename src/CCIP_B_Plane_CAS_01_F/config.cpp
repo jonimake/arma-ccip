@@ -5,7 +5,7 @@ class CfgPatches
         units[] = {"B_Plane_CAS_01_F"};
         weapons[] = {};
         requiredAddons[] = {"A3_Air_F_EPC_Plane_CAS_01"};
-        author[]= {"Joni Makela","eRazeri","Codingboy","lstor"};
+        author[]= {"eRazeri"};
     };
 };
 class CfgVehicles

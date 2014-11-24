@@ -5,7 +5,7 @@ class CfgPatches
         units[] = {};
         weapons[] = {};
         requiredAddons[] = {};
-        author[]= {"Joni Makela","eRazeri","Codingboy","lstor"};
+        author[]= {"Joni Makela","eRazeri"};
     };
 };
 class CfgFunctions

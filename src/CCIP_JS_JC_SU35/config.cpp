@@ -5,7 +5,7 @@ class CfgPatches
         units[] = {"JS_JC_SU35"};
         weapons[] = {};
         requiredAddons[] = {"JS_JC_SU35"};
-        author[]= {"Joni Makela","eRazeri","Codingboy","lstor"};
+        author[]= {"eRazeri"};
     };
 };
 class CfgVehicles

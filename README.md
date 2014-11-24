@@ -27,3 +27,20 @@ The following ammo types are supported more or less:
 Configuring allowed weapons
 --
 In order to enable CCIP on a certain aircraft, you have to define all CCIP compatible weapons in a config for that vehicle. You can see examples within.
+
+Already configured vehicles:
+=========
+Vanilla:  
+AH-9 Pawnee  
+A-164 Wipeout  
+To-199 Neophron  
+A-143 Buzzard  
+
+Additional third party addon support:  
+[F/A-18 Super Hornet](http://forums.bistudio.com/showthread.php?164308-F-A-18-Super-Hornet-for-ARMA-3)   
+[F/A-18X Black Wasp] (http://forums.bistudio.com/showthread.php?184750-F-a-18x-black-wasp)  
+[Su-35 S Flanker E] (http://forums.bistudio.com/showthread.php?164308-F-A-18-Super-Hornet-and-Su-35S-Flanker-E&p=2503784&viewfull=1#post2503784)  
+[JAS39G] (https://github.com/eRazeri)  
+[F-35C] (https://github.com/RealityGaming/OK_F_35C)  
+[Peral A-10C] (http://forums.bistudio.com/showthread.php?172682-A-10C-for-Arma-3)  
+[STI A-10A] (http://forums.bistudio.com/showthread.php?175871-STI-Addons)  

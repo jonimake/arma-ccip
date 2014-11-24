@@ -5,7 +5,7 @@ class CfgPatches
         units[] = {"I_Plane_Fighter_03_AA_F"};
         weapons[] = {};
         requiredAddons[] = {"A3_Air_F_Gamma_Plane_Fighter_03","A3_Air_F_EPC_Plane_Fighter_03"};
-        author[]= {"Joni Makela","eRazeri","Codingboy","lstor"};
+        author[]= {"eRazeri"};
     };
 };
 class CfgVehicles

@@ -5,7 +5,7 @@ class CfgPatches
         units[] = {"B_Heli_Light_01_armed_F"};
         weapons[] = {};
         requiredAddons[] = {"A3_Air_F_Heli_Light_01"};
-        author[]= {"Joni Makela","eRazeri","Codingboy","lstor"};
+        author[]= {"eRazeri"};
     };
 };
 class CfgVehicles
