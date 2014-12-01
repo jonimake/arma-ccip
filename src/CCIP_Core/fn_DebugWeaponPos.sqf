@@ -2,9 +2,6 @@
 _plane = _this select 0;
 _gunPos = _this select 1;
 
-//init
-if (isNil "CCIP_Debug_gunPosSphere") then {CCIP_Debug_gunPosSphere = objNull};
-
 //Create depending on conditions
 if(
 (alive _plane)

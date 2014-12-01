@@ -1,6 +1,6 @@
 // CCIP script by Joni Mäkelä, eRazeri kiittää ja kuittaa mahtavasta työstä!
 
-//only run this on clients and check that the CBA version is not running
+//only run this on clients
 if (hasInterface) then {
 
     ccip_iterations = 512;//512
@@ -20,8 +20,9 @@ if (hasInterface) then {
         };
     sampleIndex = 0;
     sampleRatio = 1/numSamples;
-
-    trajectoryPositions = [];
+    
+    //init the debug sphere
+    if (isNil "CCIP_Debug_gunPosSphere") then {CCIP_Debug_gunPosSphere = objNull};
 
     while {true} do {
     sleep 10;
