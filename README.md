@@ -49,4 +49,4 @@ Debugging
 =========
 There`s two functions for debugging:  
 (vehicle player) setVariable ["CCIP_DebugLine", true];//Enable line draw  
-(vehicle player) setVariable ["CCIP_CCIP_DebugWeaponPos", true];//Spawn a sphere at the starting point  
+(vehicle player) setVariable ["CCIP_DebugWeaponPos", true];//Spawn a sphere at the starting point  
