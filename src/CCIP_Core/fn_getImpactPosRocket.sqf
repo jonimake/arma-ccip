@@ -1,6 +1,4 @@
-#include "includes.sqf"
-
-
+//WIP
 _velocityVec 		= _this select 0;
 _pos 				= _this select 1;
 _airFriction 		= _this select 2;
@@ -20,9 +18,9 @@ _gunUnitV = _velocityVec call BIS_fnc_unitVector;
 _accelerationV = _gunUnitV vectorMultiply _thrust;
 
 _positions = [];
-#ifdef TRACE
+if(_plane getVariable ["CCIP_DebugLine", false])then {
 _positions = [_positions,  _pos] call BIS_fnc_arrayPush;
-#endif
+};
 
 _minResolution = 0.01;
 _maxResolution = 0.20;
@@ -68,9 +66,9 @@ for "_i" from 1 to _maxIterations do {
         _deltaPos = _velocity vectorMultiply _dt;
         _pos = _pos vectorAdd _deltaPos;
 
-#ifdef TRACE
-        _positions = [_positions, _pos] call BIS_fnc_arrayPush;
-#endif
+        if(_plane getVariable ["CCIP_DebugLine", false])then {
+            _positions = [_positions,  _pos] call BIS_fnc_arrayPush;
+        };
         _ATLPos = _pos;
         if(!surfaceIsWater _ATLPos) then {
             _ATLPos = ASLToATL _ATLPos;

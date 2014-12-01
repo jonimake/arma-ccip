@@ -16,6 +16,7 @@ class CfgFunctions
         {
             file = "CCIP_core";
             class calculateImpactPoint;
+            class DebugLine;
             class DebugWeaponPos;
             class DrawHandler;
             class getDrawPos;

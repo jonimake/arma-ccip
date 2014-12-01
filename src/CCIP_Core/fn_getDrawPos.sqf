@@ -1,4 +1,4 @@
-_plane = _this;//_this
+_plane = _this;
 _ammoName         = getText  (configFile >> "CfgMagazines" >> (currentMagazine _plane) >> "ammo");
 _initSpeed        = getNumber(configFile >> "CfgMagazines" >> (currentMagazine _plane) >> "initSpeed");
 _mass             = getNumber(configFile >> "CfgMagazines" >> (currentMagazine _plane) >> "mass");
@@ -30,8 +30,8 @@ if(!surfaceIsWater _gunPos) then {
     _gunPos = ATLToASL _gunPos;
 };
 
-if(_plane getVariable ["CCIP_DebugWeaponPos", true])then { //false
-    [_gunPos] call CCIP_fnc_DebugWeaponPos;
+if(_plane getVariable ["CCIP_DebugWeaponPos", false])then {
+    [_plane,_gunPos] call CCIP_fnc_DebugWeaponPos;
 };
 
 if(_ammoName isKindOf "MissileCore") then {

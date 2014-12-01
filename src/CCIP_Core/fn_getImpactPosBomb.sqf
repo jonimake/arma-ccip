@@ -1,7 +1,6 @@
-#include "includes.sqf"
-
+//WIP
 private ["_velocityVec","_pos","_airFriction","_initialVelocity","_gravity","_thrust","_thrustTTL","_mass"];
-debugVel = [];
+//debugVel = [];
 
 //All of this is calculated in relation to the firer ASL pos
 _velocityVec 		= _this select 0;
@@ -86,9 +85,9 @@ for "_i" from 1 to _maxIterations do {
         _deltaPos = _velocity vectorMultiply _dt;
         _pos = _pos vectorAdd _deltaPos;
 
-#ifdef TRACE
-        _positions = [_positions, _pos] call BIS_fnc_arrayPush;
-#endif
+        if(_plane getVariable ["CCIP_DebugLine", false])then {
+            _positions = [_positions,  _pos] call BIS_fnc_arrayPush;
+        };
         _ATLPos = _pos;
         if(!surfaceIsWater _ATLPos) then {
             _ATLPos = ASLToATL _ATLPos;

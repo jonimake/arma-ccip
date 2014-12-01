@@ -8,7 +8,7 @@ For the original script version see:
 https://github.com/jonimake/arma-ccip  
 
 NOTICE:
-This is a heavy WIP and will probably not work as of yet!
+This is a heavy WIP!
 
 This addon is a CCIP (continously computed impact point) solver for aircrafts in ArmA 3. It is a client side addon that only runs on clients. The addon calculates the approximate impact point of the currently selected weapon in the aircraft. It is an approximation, so there will be a small degree of error between the calculated impact point and the real impact point.
 
@@ -44,3 +44,9 @@ Additional third party addon support:
 [F-35C] (https://github.com/RealityGaming/OK_F_35C)  
 [Peral A-10C] (http://forums.bistudio.com/showthread.php?172682-A-10C-for-Arma-3)  
 [STI A-10A] (http://forums.bistudio.com/showthread.php?175871-STI-Addons)  
+
+Debugging
+=========
+There`s two functions for debugging:  
+(vehicle player) setVariable ["CCIP_DebugLine", true];//Enable line draw  
+(vehicle player) setVariable ["CCIP_CCIP_DebugWeaponPos", true];//Spawn a sphere at the starting point  

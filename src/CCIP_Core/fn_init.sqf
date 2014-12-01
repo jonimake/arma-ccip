@@ -23,24 +23,6 @@ if (hasInterface) then {
 
     trajectoryPositions = [];
 
-
-    private ["_vehiclelist"];
-
-    _vehiclelist=
-        [//vehicle classnames able to use this script, if left empty, runs on all planes
-            "B_Heli_Light_01_armed_F",
-            "B_Plane_CAS_01_F",
-            "O_Plane_CAS_02_F",
-            "I_Plane_Fighter_03_CAS_F",
-            "I_Plane_Fighter_03_AA_F",
-            "JS_JC_FA18E",
-            "JS_JC_FA18F",
-            "JS_JC_FA18E_NEW",
-            "JS_JC_FA18F_NEW",
-            "Peral_A10C",
-            "STI_A10A"
-        ];
-
     while {true} do {
     sleep 10;
 
