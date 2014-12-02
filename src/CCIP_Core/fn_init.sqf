@@ -8,7 +8,7 @@ if (hasInterface) then {
 //Variables for public usage across other scripts
     ccip_resultIndex = -1;
     ccip_impactPos = [0,0,0];
-    ccip_enabled = false;
+    CCIP_Enabled = false;
 
     ccip_hasEventHandler = false;
 
