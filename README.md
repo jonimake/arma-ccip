@@ -26,7 +26,8 @@ The following ammo types are supported more or less:
 
 Configuring allowed weapons
 --
-In order to enable CCIP on a certain aircraft, you have to define all CCIP compatible weapons in a config for that vehicle. You can see examples within.
+In order to enable CCIP on a certain aircraft, you have to define all CCIP compatible weapons in a config for that vehicle. You can see examples within.  
+If you wish not to use CCIP with a certain vehicle just remove the vehicles specific PBO and bisign.
 
 Already configured vehicles:
 =========
