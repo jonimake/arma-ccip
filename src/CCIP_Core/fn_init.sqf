@@ -1,5 +1,8 @@
 // CCIP script by Joni Mäkelä, eRazeri kiittää ja kuittaa mahtavasta työstä!
 
+//spawn this init to run along other stuff, fixes a bunch of issues with other addons ;P
+[] spawn {
+
 //only run this on clients
 if (hasInterface) then {
 
@@ -50,4 +53,5 @@ if (hasInterface) then {
             };
         };
     };
+  };
 };
