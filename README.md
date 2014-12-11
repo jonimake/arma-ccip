@@ -14,6 +14,9 @@ This addon is a CCIP (continously computed impact point) solver for aircrafts in
 
 The script only calculates the impact point. There is just a crude cross on the HUD along with distance text to indicate the computed impact point. HUD development was never a focus of this project but that might change.
 
+You can disable the CCIP per vehicle too by setting a variable to it:
+this setVariable ["CCIP_Disabled", true];//Disables CCIP fully on this vehicle
+
 How does it work?
 --
 Approximation is done by using Euler's method to solve the projectile  motion.
