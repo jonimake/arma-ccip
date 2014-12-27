@@ -4,7 +4,7 @@ class CfgPatches
     {
         units[] = {"JS_S_FA18X"};
         weapons[] = {};
-        requiredAddons[] = {"JS_S_FA18X"};
+        requiredAddons[] = {"CCIP_Core","JS_S_FA18X"};
         author[]= {"eRazeri"};
     };
 };

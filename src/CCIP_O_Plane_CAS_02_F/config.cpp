@@ -4,7 +4,7 @@ class CfgPatches
     {
         units[] = {"O_Plane_CAS_02_F"};
         weapons[] = {};
-        requiredAddons[] = {"A3_Air_F_EPC_Plane_CAS_02"};
+        requiredAddons[] = {"CCIP_Core","A3_Air_F_EPC_Plane_CAS_02"};
         author[]= {"eRazeri"};
     };
 };
