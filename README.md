@@ -48,6 +48,7 @@ Additional third party addon support:
 [F-35C] (https://github.com/RealityGaming/OK_F_35C)  
 [Peral A-10C] (http://forums.bistudio.com/showthread.php?172682-A-10C-for-Arma-3)  
 [STI A-10A] (http://forums.bistudio.com/showthread.php?175871-STI-Addons)  
+[AV-8B Harrier II](http://forums.bistudio.com/showthread.php?183415-Arma-2-AV-8B-Harrier-II-Port)
 
 Debugging
 =========

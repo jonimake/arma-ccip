@@ -4,7 +4,7 @@ class CfgPatches
     {
         units[] = {"Peral_A10C"};
         weapons[] = {};
-        requiredAddons[] = {"Peral_A10"};
+        requiredAddons[] = {"CCIP_Core","Peral_A10"};
         author[]= {"eRazeri"};
     };
 };

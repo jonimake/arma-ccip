@@ -4,7 +4,7 @@ class CfgPatches
     {
         units[] = {"F_35C","F_35C_I"};
         weapons[] = {};
-        requiredAddons[] = {"F_35C"};
+        requiredAddons[] = {"CCIP_Core","F_35C"};
         author[]= {"eRazeri"};
     };
 };
