@@ -2,10 +2,10 @@ class CfgPatches
 {
     class CCIP_Cha_AV8B
     {
-        units[] = {"Cha_AV8B","Cha_AV8B2","Cha_AV8B3"};
+        units[] = {"Cha_AV8B2"};
         weapons[] = {};
         requiredAddons[] = {"CCIP_Core","Cha_AV8B"};
-        author[]= {"Jonpas"};
+        author[]= {"Jonpas","eRazeri"};
     };
 };
 class CfgVehicles
@@ -20,9 +20,9 @@ class CfgVehicles
             "Cha_FFAR_Smallpod"
         };
         CCIP_Weapon_Positions[]= {
-            {"Cha_gatling_25mm",{-0.25,14,-1}},
-            {"Cha_GBU12BombLauncher",{0,14,-1}},
-            {"Cha_FFAR_Smallpod",{0,14,-1}}
+            {"Cha_gatling_25mm",{-0.778397,2.41323,-1.67921}},
+            {"Cha_GBU12BombLauncher",{0,0,-1.5}},
+            {"Cha_FFAR_Smallpod",{0,3,-1}}
         };
     };
 };

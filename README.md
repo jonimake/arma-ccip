@@ -48,7 +48,11 @@ Additional third party addon support:
 [F-35C] (https://github.com/RealityGaming/OK_F_35C)  
 [Peral A-10C] (http://forums.bistudio.com/showthread.php?172682-A-10C-for-Arma-3)  
 [STI A-10A] (http://forums.bistudio.com/showthread.php?175871-STI-Addons)  
-[AV-8B Harrier II](http://forums.bistudio.com/showthread.php?183415-Arma-2-AV-8B-Harrier-II-Port)
+[Chairbornes AV-8B Harrier II](http://forums.bistudio.com/showthread.php?183415-Arma-2-AV-8B-Harrier-II-Port)
+[Chairbornes Su-25](http://forums.bistudio.com/showthread.php?184199-Arma-2-Sukhoi-Su-25-Port&p=2792538#post2792538)
+[Firewills F-16C](http://forums.bistudio.com/showthread.php?187122-F-16C-Fighting-Falcon-Standalone)
+
+
 
 Debugging
 =========

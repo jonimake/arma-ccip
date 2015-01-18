@@ -1,3 +1,8 @@
+v0.3:
+-Added support for Chairbornes AV-8B Harrier II.
+-Added support for Chairbornes Su-25.
+-Added support for Firewills F-16C.
+
 v0.2:
 Fixed initialization of the addon to run on it's own thread and not blocking any other addons anymore.
 
