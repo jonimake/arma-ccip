@@ -1,3 +1,6 @@
+v0.4:
+-Updated key due to a naming related [bug](https://github.com/eRazeri/CCIP/issues/4) in them.  
+ 
 v0.3:
 -Added support for Chairbornes AV-8B Harrier II.
 -Added support for Chairbornes Su-25.
