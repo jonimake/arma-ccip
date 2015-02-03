@@ -1,7 +1,6 @@
-#include "includes.sqf"
-
+//WIP
 private ["_velocityVec","_pos","_airFriction","_initialVelocity","_gravity","_thrust","_thrustTTL","_mass"];
-debugVel = [];
+//debugVel = [];
 
 //All of this is calculated in relation to the firer ASL pos
 _velocityVec 		= _this select 0;
@@ -60,43 +59,43 @@ private "_startTime";
 _startTime = diag_tickTime;
 
 for "_i" from 1 to _maxIterations do {
-	_dt = (_i^-0.1)/8 max _minResolution;
-	_elapsedTime = _elapsedTime + _dt;
-	_a = [0,0,0];
+    _dt = (_i^-0.1)/8 max _minResolution;
+        _elapsedTime = _elapsedTime + _dt;
+        _a = [0,0,0];
 
-	if(_elapsedTime < _thrustTTL) then {
-		_a = _a vectorAdd _accelerationV;
-	};
+        if(_elapsedTime < _thrustTTL) then {
+            _a = _a vectorAdd _accelerationV;
+        };
 
-	//http://physics.gmu.edu/~amin/phys251/Topics/NumAnalysis/Odes/projectileMotion.html
-	_Vmagnitude = sqrt vectorMagnitude _velocity;
-	//0.6 is just a magic number to reduce error in the calculation, todo
-	_Vmagnitude = 0.6 * _Vmagnitude*-_airFriction;
-	_Fdrag = _velocity vectorMultiply _Vmagnitude;
+        //http://physics.gmu.edu/~amin/phys251/Topics/NumAnalysis/Odes/projectileMotion.html
+        _Vmagnitude = sqrt vectorMagnitude _velocity;
+        //0.6 is just a magic number to reduce error in the calculation, todo
+        _Vmagnitude = 0.6 * _Vmagnitude*-_airFriction;
+        _Fdrag = _velocity vectorMultiply _Vmagnitude;
 
-	//determine the velocity: v  ←  v + Δv = v + a*Δt
-	_deltaV = _Fdrag vectorMultiply (1/_mass);
-	_deltaV = _a vectorAdd _deltaV;
-	_deltaV = _deltaV vectorAdd  [0,0,-_gravity/2];
-	_deltaV = _deltaV vectorMultiply _dt;
-	_velocity = _velocity vectorAdd _deltaV;
+        //determine the velocity: v  ←  v + Δv = v + a*Δt
+        _deltaV = _Fdrag vectorMultiply (1/_mass);
+        _deltaV = _a vectorAdd _deltaV;
+        _deltaV = _deltaV vectorAdd  [0,0,-_gravity/2];
+        _deltaV = _deltaV vectorMultiply _dt;
+        _velocity = _velocity vectorAdd _deltaV;
 
 
-	//determine the position: pos  ←  pos + Δpos = pos + v*Δt
-	_deltaPos = _velocity vectorMultiply _dt;
-	_pos = _pos vectorAdd _deltaPos;
+        //determine the position: pos  ←  pos + Δpos = pos + v*Δt
+        _deltaPos = _velocity vectorMultiply _dt;
+        _pos = _pos vectorAdd _deltaPos;
 
-#ifdef TRACE
-	_positions = [_positions, _pos] call BIS_fnc_arrayPush;
-#endif
-	_ATLPos = _pos;
-	if(!surfaceIsWater _ATLPos) then {
-		_ATLPos = ASLToATL _ATLPos;
-	};
-	if((_ATLPos select 2 ) < 0) exitWith {
-		_resultIndex = _i;
-	};
+        if(_plane getVariable ["CCIP_DebugLine", false])then {
+            _positions = [_positions,  _pos] call BIS_fnc_arrayPush;
+        };
+        _ATLPos = _pos;
+        if(!surfaceIsWater _ATLPos) then {
+            _ATLPos = ASLToATL _ATLPos;
+        };
+        if((_ATLPos select 2 ) < 0) exitWith {
+            _resultIndex = _i;
+        };
 
-};
+    };
 _result = _ATLPos;
 [_result, _resultIndex, _positions];
